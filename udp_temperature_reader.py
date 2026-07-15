@@ -1,3 +1,4 @@
+print('starting kubernetes test')
 def ctof(c):
     return(c/5*9+32)
 
@@ -6,6 +7,7 @@ import json
 import datetime
 
 s=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+print('got socket:',s)
 port=23229
 s.bind(('',port))
 last_t1=-1
@@ -13,7 +15,7 @@ last_t2=-1
 
 while True:
     data=s.recv(1000)
-    # print(data)
+    print(data)
     try:
         data_string=json.loads(data)
         if 'temperature_1' in data_string and 'temperature_2' in data_string:
