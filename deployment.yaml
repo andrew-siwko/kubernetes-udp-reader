@@ -14,23 +14,10 @@ spec:
       labels:
         app: udp-reader
     spec:
+      hostNetwork: true # <-- CRITICAL: Bypasses K8s network and binds directly to the node's network
+      dnsPolicy: ClusterFirstWithHostNet # Ensures internal K8s DNS still works for this pod
       containers:
       - name: udp-container
         image: kregistry.siwko.org:5000/udp-reader:latest
-        ports:
-        - containerPort: 23229
-          protocol: UDP # <-- Critical: Tells K8s to expect UDP traffic
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: udp-reader-service
-spec:
-  selector:
-    app: udp-reader
-  type: NodePort # Allows local network access via your cluster nodes
-  ports:
-    - port: 23229
-      targetPort: 23229
-      nodePort: 23229 # Accessible from your local network at <Node-IP>:32005
-      protocol: UDP # <-- Critical: Matches the deployment protocol
+        # Note: You don't need ports or services defined anymore. 
+        # The container has direct access to the Node's port 23229.
