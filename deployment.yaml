@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: python-listener
-        image: your-registry/my-udp-image:latest # Replace with your actual image
+        image: kregistry.siwko.org:5000/udp-reader:latest
         ports:
         - containerPort: 23229
           protocol: UDP # <-- Critical: Tells K8s to expect UDP traffic
