@@ -1,35 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app-deployment
+  name: udp-reader-deployment
   labels:
-    app: my-app
+    app: udp-reader
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: my-app
+      app: udp-reader
   template:
     metadata:
       labels:
-        app: my-app
+        app: udp-reader
     spec:
       containers:
-      - name: app-container
-        image: kregistry.siwko.org:5000/my-app:latest
-        imagePullPolicy: Always
+      - name: python-listener
+        image: your-registry/my-udp-image:latest # Replace with your actual image
         ports:
-        - containerPort: 8000
+        - containerPort: 23229
+          protocol: UDP # <-- Critical: Tells K8s to expect UDP traffic
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-app-service
+  name: udp-reader-service
 spec:
-  type: NodePort
-  ports:
-  - port: 80
-    targetPort: 8000
-    nodePort: 30000
   selector:
-    app: my-app
+    app: udp-reader
+  type: NodePort # Allows local network access via your cluster nodes
+  ports:
+    - port: 23229
+      targetPort: 23229
+      nodePort: 32005 # Accessible from your local network at <Node-IP>:32005
+      protocol: UDP # <-- Critical: Matches the deployment protocol
