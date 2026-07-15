@@ -44,4 +44,4 @@ ENV PYTHONUNBUFFERED=1
 EXPOSE 8000
 
 # The command to execute your application
-CMD ["python", "app.py"]
+CMD ["python", "udp_temperature_reader.py"]
