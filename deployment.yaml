@@ -15,7 +15,7 @@ spec:
         app: udp-reader
     spec:
       containers:
-      - name: python-listener
+      - name: udp-container
         image: kregistry.siwko.org:5000/udp-reader:latest
         ports:
         - containerPort: 23229
